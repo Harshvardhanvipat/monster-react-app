@@ -20,6 +20,10 @@ class App extends Component {
       .then(users => this.setState({ monsters: users }));
   }
 
+  handleChange = e => {
+    this.setState({ searchField: e.target.value });
+  };
+
   render() {
     // in the below code we are destructuring
     // basically we are saving the states of the monsters and searchField
@@ -32,9 +36,10 @@ class App extends Component {
 
     return (
       <div className="App">
+        <h1> Monsters Rolodex </h1>
         <SearchBox
           placeholder="search monster"
-          handleChange={e => this.setState({ searchField: e.target.value })}
+          handleChange={this.handleChange}
         />
         <CardList monsters={filteredMonster}></CardList>
       </div>
