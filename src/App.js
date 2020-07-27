@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
+import { CardList } from "./components/card-list/card-list.component";
+import { SearchBox } from "./components/search-box/search-box.component";
 import "./App.css";
 
 class App extends Component {
@@ -7,22 +9,34 @@ class App extends Component {
     super();
 
     this.state = {
-      string: "Hello Yihua zang"
+      monsters: [],
+      searchField: ""
     };
   }
+
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(response => response.json())
+      .then(users => this.setState({ monsters: users }));
+  }
+
   render() {
+    // in the below code we are destructuring
+    // basically we are saving the states of the monsters and searchField
+    const { monsters, searchField } = this.state;
+
+    // in the code below we are basically filtering the array of monsters depending on the text in the input field
+    const filteredMonster = monsters.filter(monster =>
+      monster.name.toLowerCase().includes(searchField.toLowerCase())
+    );
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>{this.state.string}</p>
-          <button
-            onClick={() => this.setState({ string: "Hello Harshvardhan " })}
-          >
-            {" "}
-            change text{" "}
-          </button>
-        </header>
+        <SearchBox
+          placeholder="search monster"
+          handleChange={e => this.setState({ searchField: e.target.value })}
+        />
+        <CardList monsters={filteredMonster}></CardList>
       </div>
     );
   }
